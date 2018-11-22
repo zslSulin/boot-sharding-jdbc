@@ -1,0 +1,61 @@
+
+spring:
+  datasource:
+    primary:  #datasoruce primary
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
+      username: root
+      password: mine#mysql#
+
+    secondary:  #datasoruce secondary
+      driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://94.191.45.103:3306/sharding_part_02?useUnicode=true&amp;characterEncoding=UTF-8
+        username: root
+        password: mine#mysql#
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+
+sharding:
+  dataSources:
+    ds0: !!com.zaxxer.hikari.HikariDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
+      username: root
+      password: mine#mysql#
+    ds1: !!com.zaxxer.hikari.HikariDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
+      username: root
+      password: mine#mysql#
+
+shardingRule:
+  tables:
+    t_order:
+      actualDataNodes: ds${0..1}.t_order${0..1}
+      tableStrategy:
+        inline:
+          shardingColumn: order_id
+          algorithmExpression: t_order${order_id % 2}
+      keyGeneratorColumnName: order_id
+    t_order_item:
+      actualDataNodes: ds${0..1}.t_order_item${0..1}
+      tableStrategy:
+        inline:
+          shardingColumn: order_id
+          algorithmExpression: t_order_item${order_id % 2}
+
+  bindingTables:
+  - t_order,t_order_item
+
+  defaultDatabaseStrategy:
+    inline:
+      shardingColumn: user_id
+      algorithmExpression: ds${user_id % 2}
+
+  defaultTableStrategy:
+    none:
+  defaultKeyGeneratorClassName: io.shardingsphere.core.keygen.DefaultKeyGenerator
+
+  props:
+    sql.show: true
