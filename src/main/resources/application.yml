@@ -1,61 +1,27 @@
+server:
+  port: 9090
 
-spring:
-  datasource:
-    primary:  #datasoruce primary
-      driverClassName: com.mysql.jdbc.Driver
+#sharding-jdbc的配置
+sharding.jdbc:
+  data-sources:
+    ds_master:
+      driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
-      username: root
-      password: mine#mysql#
-
-    secondary:  #datasoruce secondary
-      driverClassName: com.mysql.jdbc.Driver
-        url: jdbc:mysql://94.191.45.103:3306/sharding_part_02?useUnicode=true&amp;characterEncoding=UTF-8
-        username: root
-        password: mine#mysql#
-
+      username: daxian
+      password: zhudaxian;.,68NB
+    ds_slave_0:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
+      username: daxian
+      password: zhudaxian;.,68NB
+  master-slave-rule:
+    name: ds_ms
+    master-data-source-name: ds_master
+    slave-data-source-names: ds_slave_0
+    load-balance-algorithm-type: round_robin
+    props:
+      sql.show: true
+#mybatis的配置
 mybatis:
-  config-location: classpath:mybatis/mybatis-config.xml
-
-sharding:
-  dataSources:
-    ds0: !!com.zaxxer.hikari.HikariDataSource
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
-      username: root
-      password: mine#mysql#
-    ds1: !!com.zaxxer.hikari.HikariDataSource
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
-      username: root
-      password: mine#mysql#
-
-shardingRule:
-  tables:
-    t_order:
-      actualDataNodes: ds${0..1}.t_order${0..1}
-      tableStrategy:
-        inline:
-          shardingColumn: order_id
-          algorithmExpression: t_order${order_id % 2}
-      keyGeneratorColumnName: order_id
-    t_order_item:
-      actualDataNodes: ds${0..1}.t_order_item${0..1}
-      tableStrategy:
-        inline:
-          shardingColumn: order_id
-          algorithmExpression: t_order_item${order_id % 2}
-
-  bindingTables:
-  - t_order,t_order_item
-
-  defaultDatabaseStrategy:
-    inline:
-      shardingColumn: user_id
-      algorithmExpression: ds${user_id % 2}
-
-  defaultTableStrategy:
-    none:
-  defaultKeyGeneratorClassName: io.shardingsphere.core.keygen.DefaultKeyGenerator
-
-  props:
-    sql.show: true
+  config-location: classpath:mybatis/config.xml
+  mapper-locations: classpath:mybatis/mappers/*.xml
