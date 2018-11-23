@@ -36,7 +36,6 @@ public class ShardingDataSourceConfig {
     }
 
     private void configDataSource(HikariDataSource hikariDataSource) {
-        hikariDataSource.setDriverClassName("com.mysql.jdbc.Driver");
         hikariDataSource.setAutoCommit(true);
         hikariDataSource.setMaximumPoolSize(50);
         hikariDataSource.setMaxLifetime(1800000L);

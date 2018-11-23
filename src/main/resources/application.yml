@@ -6,14 +6,14 @@ sharding.jdbc:
   data-sources:
     ds_master:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
-      username: daxian
-      password: zhudaxian;.,68NB
+      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
+      username: root
+      password: mine#mysql#
     ds_slave_0:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
-      username: daxian
-      password: zhudaxian;.,68NB
+      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&amp;characterEncoding=UTF-8
+      username: root
+      password: mine#mysql#
   master-slave-rule:
     name: ds_ms
     master-data-source-name: ds_master
