@@ -30,6 +30,7 @@ spring:
   redis:
     host: 94.191.45.103
     port: 6379
+    password: mine#redis#
     timeout: 10000
     database: 0
     lettuce:
@@ -38,3 +39,8 @@ spring:
         max-wait: 1
         max-idle: 8
         min-idle: 0
+
+  rabbitmq:
+    host: 94.191.45.103
+    username: mine
+    password: mine#rabbit#
