@@ -25,3 +25,16 @@ sharding.jdbc:
 mybatis:
   config-location: classpath:mybatis/config.xml
   mapper-locations: classpath:mybatis/mappers/*.xml
+
+spring:
+  redis:
+    host: 94.191.45.103
+    port: 6379
+    timeout: 10000
+    database: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: 1
+        max-idle: 8
+        min-idle: 0
