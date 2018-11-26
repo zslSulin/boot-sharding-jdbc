@@ -1,4 +1,4 @@
-package com.mine.boot.config;
+package com.mine.boot.config.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import io.shardingjdbc.core.api.config.MasterSlaveRuleConfiguration;

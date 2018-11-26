@@ -23,7 +23,6 @@ sharding.jdbc:
       sql.show: true
 #mybatis的配置
 mybatis:
-  config-location: classpath:mybatis/config.xml
   mapper-locations: classpath:mybatis/mappers/*.xml
 
 spring:

@@ -1,4 +1,4 @@
-package com.mine.boot.config;
+package com.mine.boot.config.database;
 
 import com.google.common.collect.Maps;
 import com.zaxxer.hikari.HikariDataSource;
@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Slf4j
 @Configuration
