@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * RedisLockAnnotation
- *
+ * 自定义注解使用分布式锁
  * @author zhangsl
  * @date 2018/12/11 16:52
  */

@@ -2,8 +2,6 @@ package com.mine.boot.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.ThreadUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,7 +14,7 @@ import java.lang.reflect.Method;
 
 /**
  * RedisLockAdvice
- *
+ * 实现分布式锁的逻辑
  * @author zhangsl
  * @date 2018/12/11 16:57
  */

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * RedisDistributionLock
- *
+ * 锁的实现
  * @author zhangsl
  * @date 2018/12/11 15:26
  */
