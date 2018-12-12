@@ -57,6 +57,8 @@ public class RedisLockAdvice {
                         log.error("lock exception. key:{}, lockRetryTime:{}", redisKey, lockRetryTime);
                         throw new RuntimeException();
                     }
+                    //线程阻塞
+                    Thread.sleep(redisLockAnnotation.waitTime());
                 }
                 return pjp.proceed();
             } finally {

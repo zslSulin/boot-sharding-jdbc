@@ -16,13 +16,25 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisDistributionLock {
 
+    /**
+     * 锁的key为目标数据的唯一键,value为锁的期望超时时间点;
+     *
+     * 首先进行一次setnx命令,尝试获取锁,如果成功,则设置锁的最终超时时间
+     * (以防在当前进程获取锁喉奔溃导致锁无法释放);
+     *
+     * 如果获取锁失败,则检查当前的锁是否超时,如果发现没有超时,则获取锁失败;
+     *
+     * 如果发现锁已经超时(即锁的超时时间小于等于当前时间),则再次尝试获取锁,
+     * 取到后判断下当前的超时时间和之前的超时时间是否相等,如果相等则说明当前
+     * 的客户端是排队等待的线程里的第一个尝试获取锁的,让它获取成功即可.
+     *
+     */
+
     //key的TTL,一天
     private static final int finalDefaultTTLwithKey = 24 * 3600;
 
     //锁默认超时时间,20秒
     private static final long defaultExpireTime = 20 * 1000;
-
-    private static final boolean SUCCESS = true;
 
     @Resource(name = "redisTemplate")
     private RedisTemplate<String, String> redisTemplateForGeneralize;
