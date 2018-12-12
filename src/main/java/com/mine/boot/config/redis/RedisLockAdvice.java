@@ -67,9 +67,13 @@ public class RedisLockAdvice {
         } else {
             //非阻塞锁
             try {
-
+                if (!redisDistributionLock.lock(redisKey)) {
+                    log.error("lock exception. key:{}", redisKey);
+                    throw new RuntimeException();
+                }
+                return pjp.proceed();
             } finally {
-                redisDistributionLock.unlock(redisKey)
+                redisDistributionLock.unlock(redisKey);
             }
         }
     }
