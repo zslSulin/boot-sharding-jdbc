@@ -1,6 +1,7 @@
 server:
   port: 9090
 
+
 #sharding-jdbc的配置
 sharding.jdbc:
   data-sources:
@@ -21,9 +22,11 @@ sharding.jdbc:
     load-balance-algorithm-type: round_robin
     props:
       sql.show: true
+
 #mybatis的配置
 mybatis:
   mapper-locations: classpath:mybatis/mappers/*.xml
+#  config-location: classpath:mybatis/config.xml
 
 spring:
   redis:
@@ -39,7 +42,19 @@ spring:
         max-idle: 8
         min-idle: 0
 
+
   rabbitmq:
     host: 94.191.45.103
     username: mine
     password: mine#rabbit#
+
+  application:
+    name: sharding-jdbc
+
+#log
+logging:
+  pattern:
+    file: ./logs/${application.name}.%d{yyyy-MM-dd}.log
+  level:
+    root: info
+    com.mine.boot: debug

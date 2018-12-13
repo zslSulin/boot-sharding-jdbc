@@ -2,6 +2,7 @@ package com.mine.boot.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.time.Instant;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2018/12/11 15:26
  */
 @Slf4j
+@Component
 public class RedisDistributionLock {
 
     /**
