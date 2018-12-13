@@ -10,4 +10,6 @@ import com.mine.boot.pojo.User;
  */
 public interface UserService {
     User getUserById(Long id);
+
+    Long addUser(User user);
 }
