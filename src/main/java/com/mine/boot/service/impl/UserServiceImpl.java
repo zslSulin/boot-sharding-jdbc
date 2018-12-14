@@ -1,6 +1,5 @@
 package com.mine.boot.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mine.boot.dao.UserMapper;
 import com.mine.boot.pojo.User;
 import com.mine.boot.service.UserService;
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
-        redisTemplate.opsForValue().set("user" + String.valueOf(id), JSONObject.toJSONString(user));
+        redisTemplate.opsForHash().put("user_info", String.valueOf(user.getId()), user);
         return user;
     }
 

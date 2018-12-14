@@ -1,10 +1,10 @@
 package com.mine.boot.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
@@ -38,8 +38,8 @@ public class RedisDistributionLock {
     //锁默认超时时间,20秒
     private static final long defaultExpireTime = 20 * 1000;
 
-    @Resource(name = "redisTemplate")
-    private RedisTemplate<String, String> redisTemplateForGeneralize;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 加锁,锁默认超时时间20秒
@@ -62,12 +62,12 @@ public class RedisDistributionLock {
         long lockExpireTime = now + expireTime;
 
         //setnx
-        Boolean executeResult = redisTemplateForGeneralize.opsForValue().setIfAbsent(key, String.valueOf(lockExpireTime));
+        Boolean executeResult = redisTemplate.opsForValue().setIfAbsent(key, String.valueOf(lockExpireTime));
         log.debug("redis lock debug, setnx. key:[{}], expireTime:[{}], executeResult:[{}]", key, expireTime, executeResult);
 
         //取锁成功,为key设置expire
         if (executeResult) {
-            redisTemplateForGeneralize.expire(key, finalDefaultTTLwithKey, TimeUnit.SECONDS);
+            redisTemplate.expire(key, finalDefaultTTLwithKey, TimeUnit.SECONDS);
             return true;
         } else {
             Object valueFromRedis = this.getKeyWithRetry(key, 3);
@@ -78,12 +78,12 @@ public class RedisDistributionLock {
                 //锁过期时间小于当前时间,锁已经超时,重新取锁
                 if (oldExpireTime <= now) {
                     log.debug("redis lock debug, lock time expired. key:[{}], oldExpireTime:[{}], now:[{}]", key, oldExpireTime, now);
-                    String valueFromRedis2 = redisTemplateForGeneralize.opsForValue().getAndSet(key, String.valueOf(lockExpireTime));
+                    String valueFromRedis2 = redisTemplate.opsForValue().getAndSet(key, String.valueOf(lockExpireTime));
                     long currentExpireTime = Long.parseLong(valueFromRedis2);
                     //判断currentExpireTime与oldExpireTime是否相等
                     if (currentExpireTime == oldExpireTime) {
                         log.debug("redis lock debug, getSet. key:[{}], currentExpireTime:[{}], oldExpireTime:[{}], lockExpireTime:[{}]", key, currentExpireTime, oldExpireTime, lockExpireTime);
-                        redisTemplateForGeneralize.expire(key, finalDefaultTTLwithKey, TimeUnit.SECONDS);
+                        redisTemplate.expire(key, finalDefaultTTLwithKey, TimeUnit.SECONDS);
                         return true;
                     } else {
                         //不相等,取锁失败
@@ -102,7 +102,7 @@ public class RedisDistributionLock {
         int failTime = 0;
         while (failTime < retryTimes) {
             try {
-                return redisTemplateForGeneralize.opsForValue().get(key);
+                return redisTemplate.opsForValue().get(key);
             } catch (Exception e) {
                 failTime++;
                 if (failTime >= retryTimes) {
@@ -120,7 +120,7 @@ public class RedisDistributionLock {
      */
     public boolean unlock(String key) {
         log.debug("redis unlock debug, start. resource:[{}].", key);
-        redisTemplateForGeneralize.delete(key);
+        redisTemplate.delete(key);
         return true;
     }
 }
