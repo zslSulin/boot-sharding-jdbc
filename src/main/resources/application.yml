@@ -7,12 +7,12 @@ sharding.jdbc:
   data-sources:
     ds_master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?characterEncoding=utf8
+      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: mine#mysql#
     ds_slave_0:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_02?characterEncoding=utf8
+      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_02?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: mine#mysql#
   master-slave-rule:
