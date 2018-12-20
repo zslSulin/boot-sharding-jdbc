@@ -53,7 +53,7 @@ spring:
 
 #log
 logging:
-  config: classpath:logback.xml
+#  config: classpath:logback.xml
   level:
     root: info
     com.mine.boot: debug

@@ -1,6 +1,6 @@
 package com.mine.boot.service.impl;
 
-import com.mine.boot.dao.UserMapper;
+import com.mine.boot.mapper.UserMapper;
 import com.mine.boot.pojo.User;
 import com.mine.boot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
