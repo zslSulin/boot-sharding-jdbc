@@ -1,11 +1,13 @@
 package com.mine.boot.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mine.boot.mapper.UserMapper;
 import com.mine.boot.pojo.User;
 import com.mine.boot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +29,14 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate redisTemplate;
 
     @Override
+    @Cacheable(key = "'user'.concat(#id.toString())")
     public User getUserById(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
-        redisTemplate.opsForHash().put("user_info", String.valueOf(user.getId()), user);
+        redisTemplate.opsForHash().put("user_" + id, "age", user.getAge());
+        redisTemplate.opsForHash().put("user_" + id, "loginName", user.getLoginName());
+        redisTemplate.opsForHash().put("user_" + id, "sex", user.getSex());
+        redisTemplate.opsForValue().set("user_obj" + id, user);
+        redisTemplate.opsForValue().set("user_str" + id, JSONObject.toJSONString(user));
         return user;
     }
 
