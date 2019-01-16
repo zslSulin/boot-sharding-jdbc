@@ -51,8 +51,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CachePut(key = "'user'.concat(#user.id.toString())")
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         userMapper.updateByPrimaryKeySelective(user);
+        return user;
     }
 
     @Override

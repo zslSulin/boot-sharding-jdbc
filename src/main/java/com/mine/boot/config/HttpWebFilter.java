@@ -23,7 +23,8 @@ public class HttpWebFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String uri = request.getURI().getPath();
-        log.info("请求 URI: {}", uri);
+        String method = request.getMethod().name();
+        log.info("请求 URI: {}, method: {}", uri, method);
         /**
          * 过滤器链的概念都是类似的，调用过滤器链的filter方法将请求转到下一个filter，
          * 如果该filter是最后一  个filter,那就转到
