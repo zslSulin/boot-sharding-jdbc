@@ -7,6 +7,8 @@ import com.mine.boot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -32,18 +34,30 @@ public class UserServiceImpl implements UserService {
     @Cacheable(key = "'user'.concat(#id.toString())")
     public User getUserById(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
-        redisTemplate.opsForHash().put("user_" + id, "age", user.getAge());
-        redisTemplate.opsForHash().put("user_" + id, "loginName", user.getLoginName());
-        redisTemplate.opsForHash().put("user_" + id, "sex", user.getSex());
-        redisTemplate.opsForValue().set("user_obj" + id, user);
-        redisTemplate.opsForValue().set("user_str" + id, JSONObject.toJSONString(user));
+//        redisTemplate.opsForHash().put("user_" + id, "age", user.getAge());
+//        redisTemplate.opsForHash().put("user_" + id, "loginName", user.getLoginName());
+//        redisTemplate.opsForHash().put("user_" + id, "sex", user.getSex());
+//        redisTemplate.opsForValue().set("user_obj" + id, user);
+//        redisTemplate.opsForValue().set("user_str" + id, JSONObject.toJSONString(user));
         return user;
     }
 
     @Override
-    public Long addUser(User user) {
+    @CachePut(key = "'user'.concat(#user.id.toString())")
+    public User addUser(User user) {
         userMapper.insert(user);
-        log.info("最新user的id: {}", user.getId());
-        return user.getId();
+        return user;
+    }
+
+    @Override
+    @CachePut(key = "'user'.concat(#user.id.toString())")
+    public void updateUser(User user) {
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    @CacheEvict(key = "'user'.concat(#id.toString())")
+    public void deleteUser(Long id) {
+        userMapper.deleteByPrimaryKey(id);
     }
 }

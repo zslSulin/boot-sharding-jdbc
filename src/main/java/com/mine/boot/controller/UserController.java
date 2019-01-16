@@ -22,9 +22,20 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping("/addUser")
+    @PostMapping("/user")
     public String addUser(@RequestBody User user) {
         userService.addUser(user);
-        return "{\"id\" : "+ user.getId() + "}";
+        return "success";
+    }
+
+    @PutMapping("/user")
+    public User updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return user;
+    }
+
+    @DeleteMapping("/user/{id}")
+    public void deleteUser(@PathVariable(value = "id", required = true) Long id) {
+        userService.deleteUser(id);
     }
 }

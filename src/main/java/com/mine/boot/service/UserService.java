@@ -11,5 +11,9 @@ import com.mine.boot.pojo.User;
 public interface UserService {
     User getUserById(Long id);
 
-    Long addUser(User user);
+    User addUser(User user);
+
+    void updateUser(User user);
+
+    void deleteUser(Long id);
 }
