@@ -3,25 +3,27 @@ server:
 
 
 #sharding-jdbc的配置
-sharding.jdbc:
-  data-sources:
-    ds_master:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: mine#mysql#
-    ds_slave_0:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_02?useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: mine#mysql#
-  master-slave-rule:
-    name: ds_ms
-    master-data-source-name: ds_master
-    slave-data-source-names: ds_slave_0
-    load-balance-algorithm-type: round_robin
-    props:
-      sql.show: true
+#sharding.jdbc:
+#  data-sources:
+#    ds_master:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
+#      username: root
+#      password: mine#mysql#
+#    ds_slave_0:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      jdbc-url: jdbc:mysql://94.191.45.103:3306/sharding_part_02?useUnicode=true&characterEncoding=UTF-8
+#      username: root
+#      password: mine#mysql#
+#  master-slave-rule:
+#    name: ds_ms
+#    master-data-source-name: ds_master
+#    slave-data-source-names: ds_slave_0
+#    load-balance-algorithm-type: round_robin
+#    props:
+#      sql.show: true
+
+
 
 #mybatis的配置
 mybatis:
@@ -42,15 +44,27 @@ spring:
         max-idle: 8
         min-idle: 0
 
-
   rabbitmq:
     host: 94.191.45.103
     username: mine
     password: mine#rabbit#
-
   application:
     name: sharding-jdbc
-
+#    数据库配置
+  datasource:
+    url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mine#mysql#
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      auto-commit: true
+      minimum-idle: 5
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
 #log
 logging:
 #  config: classpath:logback.xml
