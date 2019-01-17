@@ -1,0 +1,20 @@
+#sharding-jdbc的配置(读写分离)
+dataSources:
+  ds_master: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: mine#mysql#
+  ds_slave0: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://94.191.45.103:3306/sharding_part_02?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: mine#mysql#
+
+masterSlaveRule:
+  name: ds_ms
+  masterDataSourceName: ds_master
+  slaveDataSourceNames: ds_slave0
+  loadBalanceAlgorithmType: round_robin
+  props:
+    sql.show: true
