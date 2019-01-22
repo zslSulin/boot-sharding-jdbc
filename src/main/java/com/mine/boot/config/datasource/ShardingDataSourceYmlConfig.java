@@ -24,20 +24,36 @@ import java.util.Map;
 @Configuration
 public class ShardingDataSourceYmlConfig {
 
-//    private static final String SHARDING_RULE_YAML_PATH = "sharding/shardingRule.yml";
+    private static final String SHARDING_RULE_YAML_PATH = "classpath:sharding/shardingRule.yml";
     private static final String MASTER_SALVE_YAML_PATH = "classpath:sharding/masterSlave.yml";
+    private static final String SHARDING_MASTER_SALVE_YAML_PATH = "classpath:sharding/shardingMasterSalve.yml";
 
     @Bean
     public DataSource getDataSource() throws IOException, SQLException {
+        //读写分离配置
         File msYamlFile = ResourceUtils.getFile(MASTER_SALVE_YAML_PATH);
-        YamlMasterSlaveConfiguration config = YamlMasterSlaveConfiguration.unmarshal(msYamlFile);
-        Map<String, DataSource> dataSources = config.getDataSources();
-        dataSources.forEach((k,v) -> {
+        YamlMasterSlaveConfiguration msConfig = YamlMasterSlaveConfiguration.unmarshal(msYamlFile);
+        Map<String, DataSource> msDataSources = msConfig.getDataSources();
+        msDataSources.forEach((k,v) -> {
             HikariDataSource dataSource = (HikariDataSource) v;
             configDataSource(dataSource);
         });
-        return YamlMasterSlaveDataSourceFactory.createDataSource(dataSources, msYamlFile);
+        //读写分离配置over
+        return YamlMasterSlaveDataSourceFactory.createDataSource(msDataSources, msYamlFile);
     }
+
+//    public DataSource getShardingDataSource() throws IOException, SQLException {
+//        //分片配置
+//        File srFile = ResourceUtils.getFile(SHARDING_RULE_YAML_PATH);
+//        YamlShardingConfiguration srConfig = YamlShardingConfiguration.unmarshal(srFile);
+//        Map<String, DataSource> srDataSources = srConfig.getDataSources();
+//        srDataSources.forEach((k,v) -> {
+//            HikariDataSource dataSource = (HikariDataSource) v;
+//            configDataSource(dataSource);
+//        });
+//        //分片配置over
+//        return YamlShardingDataSourceFactory.createDataSource(srDataSources, srFile);
+//    }
 
 //    private Map<String, Object> parseConfig() throws IOException {
 //        Resource shardResource = new ClassPathResource(SHARDING_RULE_YAML_PATH);
