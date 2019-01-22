@@ -48,26 +48,37 @@ spring:
     host: 94.191.45.103
     username: mine
     password: mine#rabbit#
+  #    publisher-confirms: true
+  #    publisher-returns: true
+  #    listener:
+  #      simple:
+  #        concurrency: 10
+  #        max-concurrency: 50
+
   application:
     name: sharding-jdbc
-#    数据库配置
-  datasource:
-    url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: mine#mysql#
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      maximum-pool-size: 50
-      max-lifetime: 1800000
-      idle-timeout: 600000
-      auto-commit: true
-      minimum-idle: 5
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
+  #    数据库配置
+#  datasource:
+#    url: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: mine#mysql#
+#    type: com.zaxxer.hikari.HikariDataSource
+#    hikari:
+#      maximum-pool-size: 50
+#      max-lifetime: 1800000
+#      idle-timeout: 600000
+#      auto-commit: true
+#      minimum-idle: 5
+#      connection-timeout: 30000
+#      connection-test-query: SELECT 1
+  profiles:
+    include:
+
+
 #log
 logging:
-#  config: classpath:logback.xml
+  #  config: classpath:logback.xml
   level:
     root: info
     com.mine.boot: debug

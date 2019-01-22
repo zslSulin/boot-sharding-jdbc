@@ -1,0 +1,43 @@
+dataSources:
+  ds0: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: mine#mysql#
+  ds1: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://94.191.45.103:3306/sharding_part_01?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: mine#mysql#
+
+shardingRule:
+  tables:
+    t_order:
+      actualDataNodes: ds${0..1}.t_order${0..1}
+      tableStrategy:
+        inline:
+          shardingColumn: id
+          algorithmExpression: t_order${id % 2}
+      keyGeneratorColumnName: id
+    t_order_item:
+      actualDataNodes: ds${0..1}.t_order_item${0..1}
+      tableStrategy:
+        inline:
+          shardingColumn: order_id
+          algorithmExpression: t_order_item${order_id % 2}
+  bindingTables:
+    - t_order,t_order_item
+#  broadcastTables:
+#    - t_config
+
+  defaultDataSourceName: ds0
+  defaultDatabaseStrategy:
+    inline:
+      shardingColumn: user_id
+      algorithmExpression: ds${user_id % 2}
+  defaultTableStrategy:
+    none:
+  defaultKeyGeneratorClassName: io.shardingsphere.core.keygen.DefaultKeyGenerator
+
+props:
+  sql.show: true
