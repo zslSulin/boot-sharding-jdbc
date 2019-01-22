@@ -1,6 +1,5 @@
 package com.mine.boot.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mine.boot.mapper.UserMapper;
 import com.mine.boot.pojo.User;
 import com.mine.boot.service.UserService;
@@ -31,26 +30,21 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate redisTemplate;
 
     @Override
-    @Cacheable(key = "'user'.concat(#id.toString())")
+    @Cacheable(key = "'user'.concat(#id.toString())", unless = "#result == null")
     public User getUserById(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
-//        redisTemplate.opsForHash().put("user_" + id, "age", user.getAge());
-//        redisTemplate.opsForHash().put("user_" + id, "loginName", user.getLoginName());
-//        redisTemplate.opsForHash().put("user_" + id, "sex", user.getSex());
-//        redisTemplate.opsForValue().set("user_obj" + id, user);
-//        redisTemplate.opsForValue().set("user_str" + id, JSONObject.toJSONString(user));
         return user;
     }
 
     @Override
-    @CachePut(key = "'user'.concat(#user.id.toString())")
+    @CachePut(key = "'user'.concat(#user.id.toString())", unless = "#result == null ")
     public User addUser(User user) {
         userMapper.insert(user);
         return user;
     }
 
     @Override
-    @CachePut(key = "'user'.concat(#user.id.toString())")
+    @CachePut(key = "'user'.concat(#user.id.toString())", condition = "#user.id != null || #user.id != 0L")
     public User updateUser(User user) {
         userMapper.updateByPrimaryKeySelective(user);
         return user;
